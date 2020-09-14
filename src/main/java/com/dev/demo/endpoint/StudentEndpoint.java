@@ -16,7 +16,7 @@ import com.dev.demo.util.DateUtil;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("students")
 public class StudentEndpoint {
     
     @Autowired
