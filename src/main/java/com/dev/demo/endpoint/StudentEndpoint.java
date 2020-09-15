@@ -3,10 +3,7 @@ package com.dev.demo.endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.dev.demo.error.CustomErrorType;
 import com.dev.demo.model.Student;
@@ -23,13 +20,13 @@ public class StudentEndpoint {
     private DateUtil dateUtil;
     
     
-    @RequestMapping(method= RequestMethod.GET, path="/list")
+    @GetMapping
     public ResponseEntity<?> listAll(){
         System.out.println("Date formated com injeção de dependência: "+ this.dateUtil.formatLocalDateTimeToDataBasePattern(LocalDateTime.now()));
         return new ResponseEntity<>(Student.studentList, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="/{id}")
+    @GetMapping(path="/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable("id") int id){
         Student student = new Student();
         student.setId(id);
@@ -39,5 +36,16 @@ public class StudentEndpoint {
                 new CustomErrorType("Student Not Found"), HttpStatus.OK
                 );
         return new ResponseEntity<>(student.studentList.get(index), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody Student student){
+        Student.studentList.add(student);
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody Student student){
+        Student.studentList.remove(student);
+        return new ResponseEntity<>(student, HttpStatus.OK);
     }
 }
